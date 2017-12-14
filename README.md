@@ -49,6 +49,16 @@ $blink->increment('number'); // $blink->get('key') will return 1
 $blink->increment('number'); // $blink->get('key') will return 2
 $blink->increment('number', 3); // $blink->get('key') will return 5
 
+blink()->scope('acme-'); // Prefix all key-related interactions with "acme-"
+blink()->once('number', 3); // Sets key "acme-number" equal to 3
+blink()->forget('key'); // Forgets key "acme-key"
+blink()->unscope(); // Remove scope
+
+blink()->scopeGroup('acme-', function() { // Prefix all key-related interactions with "acme-"
+    blink()->once('number', 3); // Sets key "acme-number" equal to 3
+    blink()->forget('key'); // Forgets key "acme-key"
+});
+
 // Blink implements ArrayAccess
 $blink['key'] = 'value';
 $blink['key']; // Returns 'value'
@@ -214,6 +224,37 @@ public function pull(string $name)
  */
  public function decrement(string $name, int $by = 1)
 ```
+
+### scope
+```php
+/**
+ * Add prefix to all key-related interactions.
+ *
+ * @param string $prefix
+ *
+ * @return $this
+ */
+ public function scope(string $prefix)
+```
+
+### unscope
+```php
+/**
+ * Remove currently active scope.
+ *
+ * @return $this
+ */
+ public function unscope()
+```
+
+### scopeGroup
+```php
+/**
+ * Add prefix to all key-related interactions, within closure.
+ *
+ * @return $this
+ */
+ public function scopeGroup(string $prefix, callable $callback)
 
 ## Changelog
 
